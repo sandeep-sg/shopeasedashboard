@@ -1,7 +1,7 @@
 import CartItem from "@/app/lib/model/CartItem";
 import { NextResponse } from "next/server";
 
-const { ConnectDB } = require("@/app/lib/config/DB");
+import { ConnectDB } from "@/app/lib/config/DB";
 
 const dbConnect = async () => {
   await ConnectDB();
