@@ -1,8 +1,8 @@
 import User from "@/app/lib/model/User.model";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-const { ConnectDB } = require("@/app/lib/config/DB");
 import jwt from "jsonwebtoken";
+import { ConnectDB } from "@/app/lib/config/DB";
 const loadDb = async () => {
   await ConnectDB();
 };

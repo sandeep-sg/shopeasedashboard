@@ -1,7 +1,6 @@
+import { ConnectDB } from "@/app/lib/config/DB";
 import { Category } from "@/app/lib/model/Category.model";
 import { NextResponse } from "next/server";
-
-const { ConnectDB } = require("@/app/lib/config/DB");
 
 const LoadDB = async () => {
   await ConnectDB();
