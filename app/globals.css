@@ -1,0 +1,127 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+}
+@import "tailwindcss";
+:root {
+  --text-primary: #082a45;
+  --text-secondary: #7a7a7a;
+  --background: #f5f5f5;
+  --bg-header: #fff;
+  --primary: #fff;
+  --secondary: #ffecdf;
+  --accent: #ff8904;
+  --border-bottom-color: #f5f5f5;
+  --border-primary-color: #ccc;
+  --border-secondary-color: #ff8904;
+  --icon-color: #000;
+}
+.dark {
+  --text-primary: #fff;
+  --text-secondary: #b0b6bd;
+  --background: #152530;
+  --bg-header: #1d3544;
+  --primary: #182c38;
+  --secondary: #1d3544;
+  --accent: #ff8904;
+  --border-bottom-color: #22343f;
+  --border-primary-color: #273f44;
+  --border-secondary-color: #ff8904;
+  --icon-color: #fff;
+}
+
+@layer utilities {
+  .icon-color {
+    color: var(--icon-color);
+  }
+  .bg-header {
+    background: var(--bg-header);
+  }
+  .border-orange {
+    border-color: var(--accent);
+  }
+  .text-orange {
+    color: var(--accent);
+  }
+  .bg-orange {
+    background: var(--accent);
+  }
+  .hover\:bg-orange:hover {
+    background: var(--accent);
+  }
+  .hover\:text-orange:hover {
+    color: var(--accent);
+  }
+  .text-primary {
+    color: var(--text-primary);
+  }
+  .hover\:text-primary:hover {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+  .hover\:text-secondary:hover {
+    color: var(--text-secondary);
+  }
+  .bg-main {
+    background-color: var(--background);
+  }
+  .bg-primary {
+    background-color: var(--primary);
+  }
+  .bg-secondary {
+    background-color: var(--secondary);
+  }
+  .hover\:bg-primary:hover {
+    background: var(--primary);
+  }
+  .hover\:bg-secondary:hover {
+    background: var(--secondary);
+  }
+  .border-b {
+    border-bottom-width: 2px;
+    border-bottom-color: var(--border-bottom-color);
+  }
+  .border-primary {
+    border-width: 2px;
+    border-color: var(--border-primary-color);
+  }
+  .border-secondary {
+    border-width: 2px;
+    border-color: var(--border-secondary-color);
+  }
+}
+
+@theme inline {
+  --color-border-b-color: var(--border-bottom-color);
+  --background-primary: var(--background-primary);
+  --background-secdondary: var(--background-secdondary);
+  --color-border-primary: var(--border-primary-color);
+  --color-border-secondary: var(--border-secondary-color);
+}
+
+.container-center {
+  margin-inline: auto;
+  padding: 0px 40px;
+  max-width: 1300px;
+}
+@media screen and (max-width: 1024px) {
+  .container-center {
+    padding: 0px 30px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .container-center {
+    padding: 0px 20px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .container-center {
+    padding: 0px 15px;
+  }
+}
