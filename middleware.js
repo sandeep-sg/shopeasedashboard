@@ -7,19 +7,30 @@ export async function middleware(req) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
 
-  // Allow API routes without check (optional)
-  if (pathname.startsWith("/api/")) return NextResponse.next();
+  // --- ✅ CORS Headers ---
+  if (pathname.startsWith("/api/")) {
+    const res = NextResponse.next();
+    res.headers.set("Access-Control-Allow-Origin", "*");
+    res.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  // If no token and not on login page → redirect to login
+    // Handle OPTIONS preflight
+    if (req.method === "OPTIONS") {
+      return new NextResponse(null, { status: 200, headers: res.headers });
+    }
+
+    return res;
+  }
+
+  // --- ✅ Authentication ---
   if (!token) {
     if (pathname === "/login") return NextResponse.next();
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // If token exists, verify
   try {
     await jwtVerify(token, SECRET_KEY);
-    // If user tries to go to /login while logged in → redirect to /
+
     if (pathname === "/login") {
       return NextResponse.redirect(new URL("/", req.url));
     }
@@ -27,7 +38,6 @@ export async function middleware(req) {
   } catch (err) {
     console.error("Invalid token:", err.message);
 
-    // Clear invalid cookie and redirect once
     const response = NextResponse.redirect(new URL("/login", req.url));
     response.cookies.set("token", "", { maxAge: -1 }); // delete cookie
     return response;
