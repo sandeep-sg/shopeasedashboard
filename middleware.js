@@ -7,14 +7,13 @@ export async function middleware(req) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
 
-  // --- ✅ CORS Headers ---
+  // --- ✅ CORS for API routes ---
   if (pathname.startsWith("/api/")) {
     const res = NextResponse.next();
     res.headers.set("Access-Control-Allow-Origin", "*");
     res.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
     res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    // Handle OPTIONS preflight
     if (req.method === "OPTIONS") {
       return new NextResponse(null, { status: 200, headers: res.headers });
     }
@@ -22,7 +21,7 @@ export async function middleware(req) {
     return res;
   }
 
-  // --- ✅ Authentication ---
+  // --- ✅ JWT Authentication ---
   if (!token) {
     if (pathname === "/login") return NextResponse.next();
     return NextResponse.redirect(new URL("/login", req.url));
@@ -30,16 +29,13 @@ export async function middleware(req) {
 
   try {
     await jwtVerify(token, SECRET_KEY);
-
     if (pathname === "/login") {
       return NextResponse.redirect(new URL("/", req.url));
     }
     return NextResponse.next();
-  } catch (err) {
-    console.error("Invalid token:", err.message);
-
+  } catch {
     const response = NextResponse.redirect(new URL("/login", req.url));
-    response.cookies.set("token", "", { maxAge: -1 }); // delete cookie
+    response.cookies.set("token", "", { maxAge: -1 });
     return response;
   }
 }
