@@ -7,21 +7,31 @@ export async function middleware(req) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
 
-  // --- ✅ CORS for API routes ---
+  // --- ✅ Improved CORS for API routes ---
   if (pathname.startsWith("/api/")) {
-    const res = NextResponse.next();
-    res.headers.set("Access-Control-Allow-Origin", "*");
-    res.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-    res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
+    // Handle preflight OPTIONS request
     if (req.method === "OPTIONS") {
-      return new NextResponse(null, { status: 200, headers: res.headers });
+      return new NextResponse(null, {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+          "Access-Control-Max-Age": "86400",
+        },
+      });
     }
 
-    return res;
+    // For actual API requests, add CORS headers
+    const response = NextResponse.next();
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+    
+    return response;
   }
 
-  // --- ✅ JWT Authentication ---
+  // --- ✅ JWT Authentication (for non-API routes) ---
   if (!token) {
     if (pathname === "/login") return NextResponse.next();
     return NextResponse.redirect(new URL("/login", req.url));

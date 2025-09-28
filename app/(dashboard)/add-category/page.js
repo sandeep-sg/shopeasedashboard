@@ -45,6 +45,7 @@ const AddCategory = () => {
           register={register}
           placeholder="Enter category"
           errors={errors}
+          isRequired={true}
         />
         <button
           type="submit"
