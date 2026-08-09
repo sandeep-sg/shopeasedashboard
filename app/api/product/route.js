@@ -34,7 +34,7 @@ export async function POST(request) {
     }
 
     const image = formData.get("product_image");
-    if (!title || !description || !image) {
+    if (!title || !description) {
       return NextResponse.json(
         { message: "Product image is required" },
         { status: 400 }

@@ -13,19 +13,45 @@ export async function GET(_, { params }) {
     if (!userId) {
       return NextResponse.json(
         { message: "userid is required" },
-        { status: 404 }
+        { status: 404 },
       );
     }
-    const { _id } = await Cart.findOne({ user: userId });
-    console.log({ _id });
-    const cart = await CartItem.find({ cart: _id }).populate("product");
-    console.log({ cart });
+    const cartData = await Cart.findOne({
+      user: userId,
+    });
+
+    if (!cartData) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Cart not found",
+          cart: [],
+        },
+        { status: 404 },
+      );
+    }
+
+    const cart = await CartItem.find({
+      cart: cartData._id,
+    }).populate("product");
+
     return NextResponse.json(
-      { message: "Cart fetch successfully", cart },
-      { status: 200 }
+      {
+        success: true,
+        message: "Cart fetched successfully",
+        cart,
+      },
+      { status: 200 },
     );
   } catch (error) {
-    console.log(error);
-    return NextResponse.json({ message: error }, { status: 500 });
+    console.error("Get cart error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to fetch cart",
+      },
+      { status: 500 },
+    );
   }
 }
